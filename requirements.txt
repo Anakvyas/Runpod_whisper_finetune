@@ -14,13 +14,13 @@ accelerate==0.33.0
 # === Whisper & Media ===
 openai-whisper==20231117
 moviepy==1.0.3
-yt-dlp==2025.10.22
+yt-dlp==2024.10.22
 pydub>=0.25.1
 ffmpeg-python>=0.2.0
 Pillow>=10.3.0
 opencv-python-headless>=4.10.0.84
 
-# === LangChain ecosystem (no version conflicts) ===
+# === LangChain ecosystem (compatible versions) ===
 langchain==0.3.7
 langchain-community==0.3.3
 langchain-chroma==0.1.4
