@@ -11,4 +11,5 @@ COPY . /app
 RUN pip install --no-cache-dir -r requirements.txt
 
 # ✅ Default entrypoint
-CMD ["python3", "runpod_handler.py"]
+CMD ["python3", "handler.py"]
+
