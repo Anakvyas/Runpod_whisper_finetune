@@ -17,6 +17,8 @@ RUN apt-get update && apt-get install -y \
 # ✅ Install dependencies
 RUN pip install --upgrade pip && pip install --no-cache-dir -r requirements.txt
 
+RUN python3 -c "import torch; print('Torch CUDA available:', torch.cuda.is_available())"
+
 # ✅ Default entrypoint
 CMD ["python3", "handler.py"]
 
