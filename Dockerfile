@@ -1,16 +1,16 @@
 # ✅ Base: Stable PyTorch + CUDA image
 FROM pytorch/pytorch:2.1.0-cuda12.1-cudnn8-runtime
 
-# ✅ Set working directory
+# ✅ Working directory
 WORKDIR /app
 
-# ✅ Copy all project files
+# ✅ Copy project files
 COPY . /app
 
-# ✅ Prevent tzdata from hanging (non-interactive)
+# ✅ Prevent tzdata hang
 ENV DEBIAN_FRONTEND=noninteractive
 
-# ✅ Install system dependencies
+# ✅ Install all required system dependencies
 RUN apt-get update && apt-get install -y \
     git \
     ffmpeg \
@@ -20,22 +20,24 @@ RUN apt-get update && apt-get install -y \
     build-essential \
     cmake \
     libopenblas-dev \
+    libffi-dev \
+    libssl-dev \
     python3-dev \
     cargo \
     tzdata \
     && rm -rf /var/lib/apt/lists/*
 
-# ✅ Upgrade pip and core wheels
+# ✅ Upgrade pip & core build tools
 RUN pip install --upgrade pip setuptools wheel
 
-# ✅ Install all Python dependencies
+# ✅ Install Python dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
-# ✅ Verify CUDA + Torch after install
+# ✅ Sanity check for CUDA + Torch
 RUN python3 -c "import torch; print('✅ Torch', torch.__version__, '| CUDA available:', torch.cuda.is_available())"
 
-# ✅ Reset frontend mode (optional)
+# ✅ Reset frontend (optional)
 ENV DEBIAN_FRONTEND=dialog
 
-# ✅ Entrypoint (start your fine-tune job)
+# ✅ Default entrypoint
 CMD ["python3", "handler.py"]
