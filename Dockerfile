@@ -1,5 +1,5 @@
 # ✅ Base GPU Image (for Whisper + Fine-tune)
-FROM runpod/worker-torch:2.1.0-py3.10-cuda12.1
+FROM pytorch/pytorch:2.1.0-cuda12.1-cudnn8-runtime
 
 # ✅ Working directory
 WORKDIR /app
