@@ -16,4 +16,4 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 RUN python3 -c "import torch; print('✅ Torch', torch.__version__, '| CUDA available:', torch.cuda.is_available())"
 
-CMD ["python3", "handler.py"]
+CMD ["python", "-u", "handler.py"]
