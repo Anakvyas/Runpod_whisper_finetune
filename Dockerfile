@@ -1,5 +1,5 @@
-# ✅ Official RunPod Worker Image (GPU + CUDA + Python 3.10)
-FROM runpod/worker:py3.10-cuda12.1
+
+FROM runpod/serverless:gpu-cuda12.1
 
 WORKDIR /app
 COPY . /app
@@ -14,6 +14,10 @@ RUN apt-get update && apt-get install -y \
 RUN pip install --upgrade pip setuptools wheel
 RUN pip install --no-cache-dir -r requirements.txt
 
-RUN python3 -c "import torch; print('Torch:', torch.__version__, 'CUDA:', torch.cuda.is_available())"
+RUN python3 - <<EOF
+import torch
+print("Torch:", torch.__version__)
+print("CUDA available:", torch.cuda.is_available())
+EOF
 
 CMD ["python3", "handler.py"]
