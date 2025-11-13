@@ -1,16 +1,15 @@
 {
   "tests": [
     {
-      "name": "whisper_youtube_test",
+      "name": "youtube_test",
       "input": {
-        "task": "whisper",
         "mode": "youtube",
         "video": "https://www.youtube.com/watch?v=2Vv-BfVoq4g"
       },
       "timeout": 600
     },
     {
-      "name": "finetune_sample_test",
+      "name": "finetune_test",
       "input": {
         "task": "finetune",
         "dataset": [
@@ -19,25 +18,10 @@
             "label": "Hello World"
           }
         ],
-        "bucket": "demo-bucket",
+        "bucket": "your_bucket_name",
         "job_id": "test_job"
       },
       "timeout": 1200
     }
-  ],
-  "config": {
-    "gpuTypeId": "NVIDIA T4",
-    "gpuCount": 1,
-    "env": [],
-    "allowedCudaVersions": [
-      "12.7",
-      "12.6",
-      "12.5",
-      "12.4",
-      "12.3",
-      "12.2",
-      "12.1",
-      "12.0"
-    ]
-  }
+  ]
 }
