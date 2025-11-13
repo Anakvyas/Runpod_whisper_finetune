@@ -1,5 +1,4 @@
-# ✅ Correct RunPod Serverless GPU Base (2025)
-FROM ghcr.io/runpod/serverless:gpu-cuda12.2
+FROM pytorch/pytorch:2.1.0-cuda12.1-cudnn8-runtime
 
 WORKDIR /app
 COPY . /app
