@@ -1,5 +1,5 @@
-
-FROM runpod/serverless:gpu-cuda12.1
+# ✅ Correct RunPod Serverless GPU Base (2025)
+FROM ghcr.io/runpod/serverless:gpu-cuda12.2
 
 WORKDIR /app
 COPY . /app
@@ -12,12 +12,17 @@ RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/*
 
 RUN pip install --upgrade pip setuptools wheel
+
+# Whisper + Vision + Transformers + LangChain ecosystem
 RUN pip install --no-cache-dir -r requirements.txt
 
+# Debug GPU availability
 RUN python3 - <<EOF
 import torch
-print("Torch:", torch.__version__)
-print("CUDA available:", torch.cuda.is_available())
+print("🔥 Torch version:", torch.__version__)
+print("🔥 CUDA available:", torch.cuda.is_available())
+print("🔥 Current device:", torch.cuda.get_device_name(0) if torch.cuda.is_available() else "CPU")
 EOF
 
 CMD ["python3", "handler.py"]
+
