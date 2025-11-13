@@ -1,54 +1,42 @@
-import time
 import runpod
+import time
 
 def log(msg):
-    """Simple logger for GPU jobs."""
     print(f"[{time.strftime('%H:%M:%S')}] {msg}", flush=True)
 
 
 def handler(event):
-    """Main RunPod entrypoint."""
-    log("🟢 Received RunPod job request")
+    log("🟢 Job received")
+    task = event["input"].get("task")
+    mode = event["input"].get("mode")
 
-    # 🧠 Lazy import heavy modules only when the worker actually runs
     import torch
+    device = "cuda" if torch.cuda.is_available() else "cpu"
+
     from finetune_gpu import train_gpu
     from whisper_gpu import transcribe_local, transcribe_youtube
 
-    device = "cuda" if torch.cuda.is_available() else "cpu"
-
-    task = event["input"].get("task", "")
-    mode = event["input"].get("mode", "")
-    log(f"🧩 Task: {task or mode}")
-
     try:
         if task == "finetune":
-            log("🚀 Starting fine-tune job...")
+            log("🚀 Fine-tune started")
             output = train_gpu(event["input"], device)
             return {"output": output}
 
-        elif mode == "youtube" and event["input"].get("video"):
-            log("🎥 Processing YouTube transcription...")
+        if mode == "youtube":
+            log("🎥 YouTube transcription started")
             pdf_link = transcribe_youtube(event["input"]["video"])
+            return {"output": {"pdf_link": pdf_link}}
 
-        elif mode == "file" and event["input"].get("path"):
-            log("📂 Processing file transcription...")
+        if mode == "file":
+            log("📂 File transcription started")
             pdf_link = transcribe_local(event["input"]["path"])
+            return {"output": {"pdf_link": pdf_link}}
 
-        else:
-            raise ValueError("Invalid input. Expected 'task' or 'mode'.")
-
-        return {
-            "output": {
-                "pdf_link": pdf_link,
-                "persist_dir": "vectorstore/demo"
-            }
-        }
+        return {"error": "Invalid input"}
 
     except Exception as e:
-        log(f"❌ Error: {str(e)}")
+        log(f"❌ Error: {e}")
         return {"error": str(e)}
 
 
-# ✅ Required by RunPod to detect the handler
 runpod.serverless.start({"handler": handler})
